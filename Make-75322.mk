@@ -1,12 +1,5 @@
 # Makefile for customizing build for 75322 (PC-based compilation)
 
-# RELEASE
-# Name of the release to build in case of versioned_release
-RELEASE_MATURITY = RC
-RELEASE_MAJOR    = 1
-RELEASE_MINOR    = 3
-RELEASE_REVISION = 0
-
 # EXCLUDE_COMPONENTS / INCLUDE_COMPONENTS
 # List of components (common and custom) that need to be ignored or added in this product build.
 # Note that these 2 options should not be used together.

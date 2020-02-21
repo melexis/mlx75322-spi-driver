@@ -1,11 +1,4 @@
-# Makefile for customizing build for 75322 (Raspberry Pi-pased compilation)
-
-# RELEASE
-# Name of the release to build in case of versioned_release
-RELEASE_MATURITY = RC
-RELEASE_MAJOR    = 1
-RELEASE_MINOR    = 3
-RELEASE_REVISION = 0
+# Makefile for customizing build for 75322 (Raspberry Pi-based compilation)
 
 # EXCLUDE_COMPONENTS / INCLUDE_COMPONENTS
 # List of components (common and custom) that need to be ignored or added in this product build.
