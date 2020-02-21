@@ -1,4 +1,4 @@
-# Makefile for customizing build for 75322 (PC-pased compilation)
+# Makefile for customizing build for 75322 (PC-based compilation)
 
 # RELEASE
 # Name of the release to build in case of versioned_release
