@@ -2,8 +2,14 @@ ROOT_PRODUCT = 75322
 PRODUCT ?= $(ROOT_PRODUCT)
 DRIVER_NAME := lib75322_spi_drv
 
+# RELEASE
+# Name of the release to build in case of versioned_release
+RELEASE_MATURITY = RC
+RELEASE_MAJOR    = 1
+RELEASE_MINOR    = 3
+RELEASE_REVISION = 0
+
 CC := gcc
-UNCRUSTIFY ?= $(shell which uncrustify)
 ECHO := echo
 
 include Make-$(PRODUCT).mk
@@ -53,8 +59,7 @@ INCLUDES += $(patsubst %, -I%, $(SRC_DIRS))
 CPPFLAGS  = -Wall
 CPPFLAGS += -fpic
 CPPFLAGS += -std=c99
-CPPFLAGS += -c -g -ffunction-sections -fdata-sections -fms-extensions\
-	-O -Wall -W
+CPPFLAGS += -c -g -ffunction-sections -fdata-sections -fms-extensions -O -Wall -W
 CPPFLAGS += $(INCLUDES)
 CPPFLAGS += $(addprefix -D, $(COMPONENT_FLAGS))
 LIBS += $(addprefix -l, $(COMPONENT_LIBS))
@@ -67,8 +72,6 @@ DEBUG ?= 2
 ifneq ($(DEBUG), 3)
 HIDE_CMD=@
 endif
-
-UNCRUSTIFY_FILES = $(shell find ./src -type f -name *.[c\|h\|rst])
 
 .PHONY: help
 help:
@@ -114,26 +117,6 @@ clean:
 	$(HIDE_CMD)$(RM) $(OBJ_DIR)
 	$(HIDE_CMD)$(RM) $(OUT_DIR)
 	@echo "Cleaning completed"
-
-UNCRUSTIFY_COMMAND = $(UNCRUSTIFY) -c tools/uncrustify/uncrustify.cfg -l C $(UNCRUSTIFY_FILES)
-
-.PHONY:stylechecker
-stylechecker:
-ifeq ($(FIX),1)
-	@$(ECHO) "Run uncrustify with automatic replacement"
-	$(HIDE_CMD) $(UNCRUSTIFY_COMMAND) --no-backup
-	@$(ECHO) "Remove the trailing whitespace in the top folder"
-	$(HIDE_CMD) find . -maxdepth 1 -type f \( -name "*.c" -o -name "*.h" -o -iname "*.S" -o -name "*.rst" -o -name "Makefile*" -o -name "*.py" -o -name "*.m" -o -name "*.mk" -o -name "*.txt" \) -exec sed --in-place "s/[[:space:]]\+$$//" {} \+
-	@$(ECHO) "Remove the trailing whitespace in the subfolders doc and $(COMPONENT_DIRS)"
-	$(HIDE_CMD) find doc $(COMPONENT_DIRS) -type f \( -name "*.c" -o -name "*.h" -o -iname "*.S" -o -name "*.rst" -o -name "Makefile*" -o -name "*.py" -o -name "*.m" -o -name "*.mk" -o -name "*.txt" \) -exec sed --in-place "s/[[:space:]]\+$$//" {} \+
-else
-	@$(ECHO) "Run uncrustify"
-	$(HIDE_CMD) $(UNCRUSTIFY_COMMAND) --check
-	@$(ECHO) "Check for existing trailing whitespaces doc and $(COMPONENT_DIRS)"
-	$(HIDE_CMD) if [ `find . -maxdepth 1 -type f \( -name "*.c" -o -name "*.h" -o -iname "*.S" -o -name "*.rst" -o -name "Makefile*" -o -name "*.py" -o -name "*.m" -o -name "*.mk" -o -name "*.txt" \) | xargs egrep ".* +$$" | wc -l` -gt 0 ] || [ `find doc $(COMPONENT_DIRS) -type f \( -name "*.c" -o -name "*.h" -o -iname "*.S" -o -name "*.rst" -o -name "Makefile*" -o -name "*.py" -o -name "*.m" -o -name "*.mk" -o -name "*.txt" \) | xargs egrep ".* +$$" | wc -l` -gt 0 ] ; then \
-	echo "Trailing whitespace found"; exit 1; \
-	fi
-endif
 
 .PHONY: doxy
 doxy:
